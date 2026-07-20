@@ -1,23 +1,44 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import mongoose from "mongoose";
 import app from "./app";
-import connectDB from "./config/db";
+
 
 const PORT = process.env.PORT || 5000;
 
-const startServer = async () => {
-  await connectDB();
 
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
-  });
-};
+async function main() {
 
-// Only run a persistent server locally.
-// On Vercel, requests are handled by api/index.ts instead.
-if (process.env.VERCEL !== "1") {
-  startServer();
+    try {
+
+        await mongoose.connect(
+            process.env.DATABASE_URL!
+        );
+
+
+        console.log("MongoDB Connected");
+
+
+        app.listen(
+            PORT,
+            () => {
+                console.log(
+                    `Server running on ${PORT}`
+                );
+            }
+        );
+
+
+    } catch (error) {
+
+        console.log(
+            "Failed to connect with database"
+        );
+
+    }
+
 }
 
-export default app;
+
+main();

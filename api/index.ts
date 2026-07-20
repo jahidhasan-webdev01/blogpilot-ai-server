@@ -1,20 +1,24 @@
-import dotenv from "dotenv";
-dotenv.config();
-
-import connectDB from "../src/config/db";
-import app from "../src/server";
+import mongoose from "mongoose";
+import app from "../src/app";
 
 let isConnected = false;
 
-export default async function handler(req: any, res: any) {
-  try {
-    if (!isConnected) {
-      await connectDB();
-      isConnected = true;
-    }
+async function connectDB() {
+    if (isConnected) return;
+
+    await mongoose.connect(
+        process.env.DATABASE_URL!
+    );
+
+    isConnected = true;
+}
+
+
+export default async function handler(
+    req: any,
+    res: any
+) {
+    await connectDB();
+
     return app(req, res);
-  } catch (error) {
-    console.error("Handler error:", error);
-    res.status(500).json({ error: "Server initialization failed" });
-  }
 }
