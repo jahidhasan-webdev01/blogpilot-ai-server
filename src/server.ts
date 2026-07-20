@@ -14,4 +14,10 @@ const startServer = async () => {
   });
 };
 
-startServer();
+// Only run a persistent server locally.
+// On Vercel, requests are handled by api/index.ts instead.
+if (process.env.VERCEL !== "1") {
+  startServer();
+}
+
+export default app;
