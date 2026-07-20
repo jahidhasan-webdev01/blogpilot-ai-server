@@ -1,17 +1,17 @@
 import mongoose from "mongoose";
 
 const connectDB = async () => {
-  if (mongoose.connection.readyState >= 1) {
-    return; // already connected, reuse in serverless
-  }
+    if (mongoose.connection.readyState === 1) {
+        return;
+    }
 
-  try {
-    await mongoose.connect(process.env.DATABASE_URL as string);
+    if (!process.env.DATABASE_URL) {
+        throw new Error("DATABASE_URL is not defined");
+    }
+
+    await mongoose.connect(process.env.DATABASE_URL);
+
     console.log("✅ MongoDB Connected");
-  } catch (error) {
-    console.error("❌ MongoDB Connection Failed", error);
-    throw error; // let the caller handle it, don't kill the process
-  }
 };
 
 export default connectDB;
