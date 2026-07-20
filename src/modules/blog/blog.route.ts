@@ -10,6 +10,8 @@ router.get("/", BlogController.getAllBlogs);
 
 router.get("/:id", BlogController.getSingleBlog);
 
+router.patch("/:id", auth, BlogController.updateBlog);
+
 router.delete("/:id", auth, BlogController.deleteBlog);
 
 export default router;

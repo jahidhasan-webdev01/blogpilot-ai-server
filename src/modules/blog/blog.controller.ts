@@ -52,3 +52,27 @@ export const deleteBlog = async (req: Request, res: Response) => {
         message: "Blog deleted successfully",
     });
 };
+
+export const updateBlog = async (
+    req: Request,
+    res: Response
+) => {
+    try {
+        const id = req.params.id as string;
+
+        const result = await BlogService.updateBlog(
+            id,
+            req.body
+        );
+
+        res.status(200).json({
+            success: true,
+            data: result,
+        });
+    } catch {
+        res.status(500).json({
+            success: false,
+            message: "Failed to update blog",
+        });
+    }
+};

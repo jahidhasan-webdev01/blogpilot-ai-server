@@ -14,7 +14,7 @@ export const getAllBlogs = async (query: any) => {
     } = query;
 
     const filter: Record<string, any> = {};
-    
+
     if (search) {
         filter.title = {
             $regex: search,
@@ -51,4 +51,14 @@ export const getSingleBlog = async (id: string) => {
 
 export const deleteBlog = async (id: string) => {
     return await Blog.findByIdAndDelete(id);
+};
+
+export const updateBlog = async (
+    id: string,
+    payload: any
+) => {
+    return await Blog.findByIdAndUpdate(id, payload, {
+        new: true,
+        runValidators: true,
+    });
 };
