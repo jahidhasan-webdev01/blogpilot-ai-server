@@ -62,3 +62,30 @@ export const updateBlog = async (
         runValidators: true,
     });
 };
+
+export const getAllCategories = async () => {
+  const categories = await Blog.distinct("category");
+
+  return categories;
+};
+
+export const getMyBlogs = async (userEmail: string, query: any) => {
+  const { sort = "desc", page = "1", limit = "8" } = query;
+
+  const filter = { authorEmail: userEmail };
+  const skip = (Number(page) - 1) * Number(limit);
+
+  const total = await Blog.countDocuments(filter);
+
+  const blogs = await Blog.find(filter)
+    .sort({ createdAt: sort === "asc" ? 1 : -1 })
+    .skip(skip)
+    .limit(Number(limit));
+
+  return {
+    blogs,
+    total,
+    page: Number(page),
+    totalPages: Math.ceil(total / Number(limit)),
+  };
+};

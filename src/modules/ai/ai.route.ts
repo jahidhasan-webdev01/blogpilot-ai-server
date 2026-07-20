@@ -12,7 +12,6 @@ router.post(
 
 router.post(
     "/chat",
-    auth,
     AIController.chat
 );
 

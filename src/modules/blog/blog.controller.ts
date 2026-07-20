@@ -19,6 +19,7 @@ export const createBlog = async (req: Request, res: Response) => {
 
 export const getAllBlogs = async (req: Request, res: Response) => {
     try {
+        console.log(req.query);
         const result = await BlogService.getAllBlogs(req.query);
 
         res.status(200).json({
@@ -75,4 +76,47 @@ export const updateBlog = async (
             message: "Failed to update blog",
         });
     }
+};
+
+export const getAllCategories = async (req: Request,
+    res: Response) => {
+    try {
+        const categories = await BlogService.getAllCategories();
+
+        res.status(200).json({
+            success: true,
+            message: "Categories retrieved successfully",
+            data: categories,
+        });
+    } catch {
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+        });
+    }
+};
+
+export const getMyBlogs = async (req: Request, res: Response) => {
+  try {
+    const userEmail = req.user?.email;
+
+    if (!userEmail) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized access",
+      });
+    }
+
+    const result = await BlogService.getMyBlogs(userEmail, req.query);
+
+    return res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch user blogs",
+    });
+  }
 };

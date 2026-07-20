@@ -8,6 +8,11 @@ router.post("/", auth, BlogController.createBlog);
 
 router.get("/", BlogController.getAllBlogs);
 
+router.get("/categories", BlogController.getAllCategories);
+
+// Dedicated route for currently logged-in user's blogs
+router.get("/my-blogs", auth, BlogController.getMyBlogs);
+
 router.get("/:id", BlogController.getSingleBlog);
 
 router.patch("/:id", auth, BlogController.updateBlog);
