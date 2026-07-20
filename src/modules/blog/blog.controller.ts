@@ -18,12 +18,19 @@ export const createBlog = async (req: Request, res: Response) => {
 };
 
 export const getAllBlogs = async (req: Request, res: Response) => {
-    const blogs = await BlogService.getAllBlogs();
+    try {
+        const result = await BlogService.getAllBlogs(req.query);
 
-    res.json({
-        success: true,
-        data: blogs,
-    });
+        res.status(200).json({
+            success: true,
+            data: result,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch blogs",
+        });
+    }
 };
 
 export const getSingleBlog = async (req: Request, res: Response) => {
